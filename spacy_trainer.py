@@ -37,9 +37,9 @@ import random
 import warnings
 from os import listdir
 
-from copious_loader import COPIOUS_LOADER as cpload
+from copious_loader import create_dataset as cop_create
 from tsv_loader import TSV_LOADER
-from random_loader import RANDOM_LOADER as rdload
+from random_loader import create_dataset as rdm_create
 
 def train(iterations):
     """
@@ -56,8 +56,8 @@ def train(iterations):
 
     other_pipes = [pipe for pipe in nlp.pipe_names if pipe != "ner"]
 
-    cop_data = cpload.create_dataset()
-    rdm_data = rdload.create_dataset()
+    cop_data = cop_create()
+    rdm_data = rdm_create()
     TRAIN_DATA = cop_data + rdm_data
 
     with nlp.disable_pipes(*other_pipes):
@@ -95,7 +95,7 @@ def test():
     false_pos = 0
     false_neg = 0
 
-    test_data = cpload.create_dataset(path='../data/copious_published/test')
+    test_data = cop_create(path='../data/copious_published/test')
 
     for text, annotations in test_data:
         pred_ents = [ent.text for ent in nlp(text).ents]
