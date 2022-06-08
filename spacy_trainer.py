@@ -36,10 +36,15 @@ import re
 import random
 import warnings
 from os import listdir
+import os
+os.environ['KMP_DUPLICATE_LIB_OK']='True'
 
-from copious_loader import create_dataset as cop_create
-from tsv_loader import TSV_LOADER
-from random_loader import create_dataset as rdm_create
+# from copious_loader import create_dataset as cop_create
+# from tsv_loader import TSV_LOADER
+# from random_loader import create_dataset as rdm_create
+from pickle_dump import rand_load
+from pickle_dump import cop_load
+from pickle_dump import cop_test_load
 
 def train(iterations):
     """
@@ -47,17 +52,21 @@ def train(iterations):
     """
     # nlp = spacy.blank("en")
     # nlp = spacy.load('en_core_web_sm')
+    # nlp = spacy.load('en_core_web_lg')
     nlp = spacy.load('en_core_web_trf')
+
+    print(nlp.pipe_names)
     if "ner" not in nlp.pipe_names:
         nlp.add_pipe("ner", last=True)
 
     ner = nlp.get_pipe("ner")
     ner.add_label("TAXON")
 
-    other_pipes = [pipe for pipe in nlp.pipe_names if pipe != "ner"]
+    pipe_exceptions = ["ner", "transformer"]
+    other_pipes = [pipe for pipe in nlp.pipe_names if pipe not in pipe_exceptions]
 
-    cop_data = cop_create()
-    rdm_data = rdm_create()
+    cop_data = cop_load()
+    rdm_data = rand_load()
     TRAIN_DATA = cop_data + rdm_data
 
     with nlp.disable_pipes(*other_pipes):
@@ -95,7 +104,7 @@ def test():
     false_pos = 0
     false_neg = 0
 
-    test_data = cop_create(path='../data/copious_published/test')
+    test_data = cop_test_load()
 
     for text, annotations in test_data:
         pred_ents = [ent.text for ent in nlp(text).ents]
