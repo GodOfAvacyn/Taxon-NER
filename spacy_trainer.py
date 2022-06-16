@@ -53,8 +53,8 @@ def train(iterations):
     """
     # nlp = spacy.blank("en")
     # nlp = spacy.load('en_core_web_sm')
-    # nlp = spacy.load('en_core_web_lg')
-    nlp = spacy.load('en_core_web_trf')
+    nlp = spacy.load('en_core_web_lg')
+    # nlp = spacy.load('en_core_web_trf')
 
     print(nlp.pipe_names)
     if "ner" not in nlp.pipe_names:
