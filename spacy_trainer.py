@@ -25,6 +25,7 @@ Simply edit the string called 'text' to be any sentence!
 The model is saved as 'taxon_ner_model'.
 ============================================================================ """
 import spacy
+spacy.require_gpu()
 from spacy.lang.en import English
 from spacy.training import Example
 from spacy.pipeline import EntityRuler
