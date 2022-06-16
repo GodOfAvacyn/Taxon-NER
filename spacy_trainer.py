@@ -92,13 +92,14 @@ def train(iterations):
                     losses=losses
                 )
             print(losses)
+        nlp.to_disk("../spacy_model")
         return nlp
 
 def test():
     # nlp = train_spacy(40)
     # nlp.to_disk("taxon_ner_model")
 
-    nlp = spacy.load("taxon_ner_model")
+    nlp = spacy.load("../spacy_model")
 
     true_pos = 0
     false_pos = 0
@@ -131,7 +132,7 @@ def test():
 
 
 def demo():
-    nlp = spacy.load("taxon_ner_model")
+    nlp = spacy.load("../spacy_model")
     text = "in Aquaman, Arthur controls sharks, more commonly known as Squalus carcharias, with his mind."
     pred_ents = [ent.text for ent in nlp(text).ents]
     print(pred_ents)
@@ -140,6 +141,8 @@ def demo():
     pred_ents = [ent.text for ent in nlp(text).ents]
     print(pred_ents)
 
-train(40)
-# test()
-# demo()
+train(33)
+print("\nTESTING")
+test()
+print("\nDEMO")
+demo()
